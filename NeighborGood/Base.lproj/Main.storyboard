@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -9,16 +10,79 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="NeighborGood" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="center" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.29999999999999999" contentMode="scaleAspectFit" image="mapbg" translatesAutoresizingMaskIntoConstraints="NO" id="FCi-5z-XUz">
+                                <rect key="frame" x="-62" y="-102" width="517" height="1056"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1056" id="4jy-aK-6pi"/>
+                                </constraints>
+                            </imageView>
+                            <searchBar clipsSubviews="YES" contentMode="redraw" barStyle="black" placeholder="Search Neighborhood" translatesAutoresizingMaskIntoConstraints="NO" id="ksO-fW-pQi">
+                                <rect key="frame" x="37" y="404" width="319" height="56"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <offsetWrapper key="searchFieldBackgroundPositionAdjustment" horizontal="0.0" vertical="0.0"/>
+                                <textInputTraits key="textInputTraits" textContentType="address-level3"/>
+                                <scopeButtonTitles>
+                                    <string>Title</string>
+                                    <string>Title</string>
+                                </scopeButtonTitles>
+                                <connections>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="yZG-zl-YKL"/>
+                                </connections>
+                            </searchBar>
+                            <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UVe-FR-0As">
+                                <rect key="frame" x="157.66666666666666" y="495" width="77.666666666666657" height="37"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Search" cornerStyle="large">
+                                    <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="baseBackgroundColor" systemColor="tableCellBlueTextColor"/>
+                                </buttonConfiguration>
+                            </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="Screenshot 2025-03-27 at 12.42.27 PM" translatesAutoresizingMaskIntoConstraints="NO" id="Efa-Hs-dA2">
+                                <rect key="frame" x="100.66666666666669" y="139" width="192" height="173"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="192" id="jQu-7R-UkO"/>
+                                    <constraint firstAttribute="height" constant="173" id="k02-0R-ymZ"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="FCi-5z-XUz" firstAttribute="centerX" secondItem="UVe-FR-0As" secondAttribute="centerX" id="0nO-bS-a2d"/>
+                            <constraint firstItem="FCi-5z-XUz" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-78" id="3Y6-u9-KaW"/>
+                            <constraint firstItem="UVe-FR-0As" firstAttribute="top" secondItem="ksO-fW-pQi" secondAttribute="bottom" constant="35" id="BNB-nD-lyV"/>
+                            <constraint firstItem="ksO-fW-pQi" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="345" id="NaR-F1-66P"/>
+                            <constraint firstItem="ksO-fW-pQi" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="36.666666666666657" id="UeJ-Sc-cei"/>
+                            <constraint firstItem="ksO-fW-pQi" firstAttribute="centerX" secondItem="UVe-FR-0As" secondAttribute="centerX" id="Wd7-4e-jcl"/>
+                            <constraint firstItem="UVe-FR-0As" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="157.66666666666666" id="ZIV-IU-u7h"/>
+                            <constraint firstItem="FCi-5z-XUz" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="b1k-4P-dEV"/>
+                            <constraint firstItem="ksO-fW-pQi" firstAttribute="top" secondItem="Efa-Hs-dA2" secondAttribute="bottom" constant="92" id="rb0-yA-uzL"/>
+                            <constraint firstItem="ksO-fW-pQi" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="sle-rK-0e2"/>
+                            <constraint firstItem="Efa-Hs-dA2" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="uSC-de-Rni"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="neighborhoodSearchBar" destination="ksO-fW-pQi" id="QiL-Y7-W55"/>
+                        <outlet property="searchButton" destination="UVe-FR-0As" id="7DZ-vu-GL6"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="26.717557251908396" y="3.5211267605633805"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Screenshot 2025-03-27 at 12.42.27 PM" width="1054" height="952"/>
+        <image name="mapbg" width="908" height="1588"/>
+        <systemColor name="tableCellBlueTextColor">
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
 </document>

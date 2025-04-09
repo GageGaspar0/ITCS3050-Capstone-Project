@@ -59,7 +59,7 @@ Flow Navigation (Screen to Screen)
 
 Wireframes
 
-![App Screenshot](Assets/wireframes)
+![App Screenshot](NeighborGood/Assets/wireframes)
 
 
 Networking
