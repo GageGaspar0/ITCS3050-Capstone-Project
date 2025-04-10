@@ -31,7 +31,6 @@ struct CrimeRecord: Decodable {
 class ViewController: UIViewController, UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var neighborhoodSearchBar: UISearchBar!
-    @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var resultsTableView: UITableView!
     
     private var locations: [String] = []
@@ -47,6 +46,7 @@ class ViewController: UIViewController, UISearchBarDelegate, UITableViewDataSour
         resultsTableView.dataSource = self
         resultsTableView.delegate = self
         resultsTableView.isHidden = true
+        neighborhoodSearchBar.returnKeyType = .search
         loadLocations()
     }
     
@@ -87,6 +87,19 @@ class ViewController: UIViewController, UISearchBarDelegate, UITableViewDataSour
             resultsTableView.isHidden = filteredLocations.isEmpty
             resultsTableView.reloadData()
         }
+    }
+
+       func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        view.endEditing(true) 
+        
+        guard let searchText = searchBar.text, !searchText.isEmpty else {
+            let alert = UIAlertController(title: "Empty Search", message: "Please enter an address to search", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            present(alert, animated: true)
+            return
+        }
+        
+        performSegue(withIdentifier: "showResults", sender: searchText)
     }
 
     func fetchCrimeDataForLetter(letter: String) {
@@ -162,23 +175,17 @@ class ViewController: UIViewController, UISearchBarDelegate, UITableViewDataSour
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        let selectedLocation = filteredLocations[indexPath.row]
-        neighborhoodSearchBar.text = selectedLocation
-        resultsTableView.isHidden = true
-        filteredLocations = []
-    }
+   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    tableView.deselectRow(at: indexPath, animated: true)
+    let selectedLocation = filteredLocations[indexPath.row]
+    neighborhoodSearchBar.text = selectedLocation
+    resultsTableView.isHidden = true
+    filteredLocations = []
     
-    @IBAction func searchButtonTapped(_ sender: UIButton) {
-        guard let searchText = neighborhoodSearchBar.text, !searchText.isEmpty else {
-            let alert = UIAlertController(title: "Empty Search", message: "Please enter an address to search", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default))
-            present(alert, animated: true)
-            return
-        }
-        performSegue(withIdentifier: "showResults", sender: searchText)
-    }
+    
+    performSegue(withIdentifier: "showResults", sender: selectedLocation)
+}
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showResults",
