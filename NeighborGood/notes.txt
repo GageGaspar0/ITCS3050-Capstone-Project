@@ -1,2 +1,19 @@
+ideas for crime data analysis dashboard
 
+-total number of incidents
+-number of incidents per each year, years range from 2017 to 2025
+-average number of incidents per year
+-the trend for incidents, based on last 5 years avg
+-some places have a thousands of the same offenses and currently the dashboard is showing all of them, ill update the dashboard to show each type of offense only once, then add a count next to it
+-I have to use data persistennce in this project and I still have not implemented it yet.
+    -data persistence idea: store user's search history on device, and 'each time a user searches a new neighborhood, compare the new neighborhood to all the other neighborhoods in their search history, collectively.
+        example: This neighborhood is 15% safer than all the other neighborhoods you have recently searched.
+        or: This neighborhood's incident rate is decreasing 25% faster than all the other neighborhoods you have recently searched
+        
+-remember to go back and remove 2025 results from the average calculations because they are significantly impacting the trend result since 2025 is not even half way through yet
+
+- go back and add what % of the total crime a specific offense makes up.
+    ex: drug/narcotic offense - count 36 - this offense makes up 85% of the total crime in this neighborhood
+    ex: breaking and entering - count 3 - this offense makes up 4% of th total crime for this neighborhood
+    
 

@@ -121,10 +121,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="j2B-TK-QpE">
-                                <rect key="frame" x="46" y="59" width="301" height="724"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="j2B-TK-QpE">
+                                <rect key="frame" x="20" y="59" width="353" height="724"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="724" id="ZKQ-Jt-rml"/>
+                                    <constraint firstAttribute="width" constant="353" id="bai-Uv-Agb"/>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="724" id="qSy-EZ-hYL"/>
+                                </constraints>
                                 <connections>
                                     <outlet property="dataSource" destination="hJD-I5-Qop" id="PrZ-Ec-nux"/>
                                     <outlet property="delegate" destination="hJD-I5-Qop" id="b6A-Zu-eVT"/>
@@ -133,6 +137,11 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="keh-fN-deV"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="keh-fN-deV" firstAttribute="trailing" secondItem="j2B-TK-QpE" secondAttribute="trailing" constant="20" id="H0r-O0-POy"/>
+                            <constraint firstItem="keh-fN-deV" firstAttribute="bottom" secondItem="j2B-TK-QpE" secondAttribute="bottom" constant="35" id="kJx-gf-HZ4"/>
+                            <constraint firstItem="j2B-TK-QpE" firstAttribute="leading" secondItem="keh-fN-deV" secondAttribute="leading" constant="20" id="zUP-vJ-Iuk"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Umn-sl-YLC"/>
                     <connections>
