@@ -49,7 +49,6 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
         dataByYearAndOffense[year]?[offense]?.append(record)
     }
     
-    // Sort descending (newest first)
     sortedYears = dataByYearAndOffense.keys.sorted { lhs, rhs in
         if let leftInt = Int(lhs), let rightInt = Int(rhs) {
             return leftInt > rightInt

@@ -132,15 +132,15 @@ class CrimeAnalysisService {
     }
     
     static func formatDate(_ dateString: String) -> String {
-        let inputFormatter = DateFormatter()
-        inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-        
-        guard let date = inputFormatter.date(from: dateString) else {
-            return dateString
-        }
-        
-        let outputFormatter = DateFormatter()
-        outputFormatter.dateFormat = "MMM d, yyyy"
-        return outputFormatter.string(from: date)
+    let inputFormatter = DateFormatter()
+    inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+
+    guard let date = inputFormatter.date(from: dateString) else {
+        return dateString
     }
+
+    let outputFormatter = DateFormatter()
+    outputFormatter.dateFormat = "yyyy-MM-dd"
+    return outputFormatter.string(from: date)
+}
 }

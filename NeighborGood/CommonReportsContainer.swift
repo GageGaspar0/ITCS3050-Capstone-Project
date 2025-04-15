@@ -52,4 +52,5 @@ class CommonReportsContainer: UIView {
         offensePercentage.text = percentage
         offensePercentContainer.backgroundColor = percentColor
     }
+
 }

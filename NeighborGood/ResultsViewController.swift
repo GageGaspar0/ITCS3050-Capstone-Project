@@ -88,7 +88,8 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
         subViewThree.layer.cornerRadius = 10
         subViewFour.layer.cornerRadius = 10
         mostCommonReports.layer.cornerRadius = 20
-        
+        totalIncidentsLabel.text = "0"
+        avgIncidentsPerYearLabel.text = "0"
        
         if !searchAddress.isEmpty {
             print("Searching for address: \(searchAddress)")
@@ -97,6 +98,38 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
             print("Search address is empty")
         }
     }
+
+    private func animateCountUp(for label: UILabel, to finalValue: Int, duration: Double) {
+    let steps = 30
+    let increment = Double(finalValue) / Double(steps)
+    var currentValue = 0.0
+    
+    Timer.scheduledTimer(withTimeInterval: duration / Double(steps), repeats: true) { timer in
+        currentValue += increment
+        if currentValue >= Double(finalValue) {
+            label.text = "\(finalValue)"
+            timer.invalidate()
+        } else {
+            label.text = "\(Int(currentValue))"
+        }
+    }
+}
+
+private func animateDoubleCountUp(for label: UILabel, to finalValue: Double, duration: Double, decimals: Int) {
+    let steps = 30
+    let increment = finalValue / Double(steps)
+    var currentValue = 0.0
+    
+    Timer.scheduledTimer(withTimeInterval: duration / Double(steps), repeats: true) { timer in
+        currentValue += increment
+        if currentValue >= finalValue {
+            label.text = String(format: "%.\(decimals)f", finalValue)
+            timer.invalidate()
+        } else {
+            label.text = String(format: "%.\(decimals)f", currentValue)
+        }
+    }
+}
     
     func displayError(_ message: String) {
         crimeRecords = []
@@ -109,7 +142,8 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func fetchCrimeData(for address: String) {
-        let activityIndicator = UIActivityIndicatorView(style: .medium)
+    let activityIndicator = UIActivityIndicatorView(style: .medium)
+    activityIndicator.startAnimating()
         activityIndicator.startAnimating()
         activityIndicator.center = view.center
         activityIndicator.hidesWhenStopped = true
@@ -182,34 +216,51 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
                     self?.crimeRecords = relevantRecords
                     if let tabBar = self?.tabBarController,
                        let vcs = tabBar.viewControllers {
-                        // We know the second tab is the Detail tab:
                         if let detailVC = vcs[1] as? DetailViewController {
                             detailVC.crimeRecords = relevantRecords
                         }
                     }
                     self?.crimeStatistics = CrimeAnalysisService.analyze(crimeRecords: relevantRecords)
-                    self?.totalIncidentsLabel.text = "\(self?.crimeRecords.count ?? 0)"
-                    self?.avgIncidentsPerYearLabel.text = "\(String(format: "%.2f", self?.crimeStatistics?.averageIncidentsPerYear ?? 0))"
+                     let totalIncidents = self?.crimeRecords.count ?? 0
+                self?.animateCountUp(for: self?.totalIncidentsLabel ?? UILabel(),
+                                     to: totalIncidents,
+                                     duration: 1.5)
+                      let avg = self?.crimeStatistics?.averageIncidentsPerYear ?? 0
+                self?.animateDoubleCountUp(for: self?.avgIncidentsPerYearLabel ?? UILabel(),
+                                           to: avg,
+                                           duration: 1.5,
+                                           decimals: 0)
 
-                    if let stats = self?.crimeStatistics {
-                        let sixYearIncreasing = CrimeAnalysisService.isCrimeIncreasingOverLastSixYears(incidentsPerYear: stats.incidentsPerYear)
-                        if sixYearIncreasing {
-                            self?.sixYearTrendImage.image = UIImage(systemName: "arrow.up.forward")
-                            self?.sixYearTrendImage.tintColor = .red
-                        } else {
-                            self?.sixYearTrendImage.image = UIImage(systemName: "arrow.down.forward")
-                            self?.sixYearTrendImage.tintColor = .green
-                        }
-                        
+                   if let stats = self?.crimeStatistics {
+    let sixYearIncreasing = CrimeAnalysisService.isCrimeIncreasingOverLastSixYears(incidentsPerYear: stats.incidentsPerYear)
+    if sixYearIncreasing {
+        self?.sixYearTrendImage.image = UIImage(systemName: "arrow.up.forward")
+        self?.sixYearTrendImage.tintColor = .red
+    } else {
+        self?.sixYearTrendImage.image = UIImage(systemName: "arrow.down.forward")
+        self?.sixYearTrendImage.tintColor = .green
+    }  
+    
+    
+    self?.sixYearTrendImage.transform = CGAffineTransform(translationX: -50, y: 0)
+    UIView.animate(withDuration: 1.0) {
+        self?.sixYearTrendImage.transform = .identity
+    }
+    
+    let threeYearIncreasing = CrimeAnalysisService.isCrimeIncreasingOverLastThreeYears(incidentsPerYear: stats.incidentsPerYear)
+    if threeYearIncreasing {
+        self?.threeYearTrendImage.image = UIImage(systemName: "arrow.up.forward")
+        self?.threeYearTrendImage.tintColor = .red
+    } else {
+        self?.threeYearTrendImage.image = UIImage(systemName: "arrow.down.forward")
+        self?.threeYearTrendImage.tintColor = .green
+    }
+                       self?.threeYearTrendImage.transform = CGAffineTransform(translationX: -50, y: 0)
+                         UIView.animate(withDuration: 1.0, delay: 0.3, options: .curveEaseInOut, animations: {
+                             self?.threeYearTrendImage.transform = .identity
+                         }, completion: nil)
                        
-                        let threeYearIncreasing = CrimeAnalysisService.isCrimeIncreasingOverLastThreeYears(incidentsPerYear: stats.incidentsPerYear)
-                        if threeYearIncreasing {
-                            self?.threeYearTrendImage.image = UIImage(systemName: "arrow.up.forward")
-                            self?.threeYearTrendImage.tintColor = .red
-                        } else {
-                            self?.threeYearTrendImage.image = UIImage(systemName: "arrow.down.forward")
-                            self?.threeYearTrendImage.tintColor = .green
-                        }
+                        
                         self?.mostCommonReports.subviews.forEach { $0.removeFromSuperview() }
                         
                      
