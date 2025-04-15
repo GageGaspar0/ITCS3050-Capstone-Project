@@ -98,5 +98,8 @@ SUMMARY
 
 Currently working on designing and implementing functional UI as well as search and search autofill feature.
     
+Completed Sprint 1: UI
+Completed Sprint 2: connect API and retrieve data
+Completed Spring 3 and 4: create overview and detailed dashboard - already had all the data and the functions to analyse the data for both overview and detailed dashboard, only had to embed the results inside a tab bar controller and display the data separately
 
 
