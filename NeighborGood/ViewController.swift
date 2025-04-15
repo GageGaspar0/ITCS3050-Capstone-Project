@@ -39,9 +39,11 @@ class ViewController: UIViewController, UISearchBarDelegate, UITableViewDataSour
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
+        
         neighborhoodSearchBar.delegate = self
         resultsTableView.dataSource = self
         resultsTableView.delegate = self
@@ -65,6 +67,7 @@ class ViewController: UIViewController, UISearchBarDelegate, UITableViewDataSour
         }
     }
     
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if let firstChar = searchText.first, firstChar.isLetter {
             let letter = String(firstChar).lowercased()
@@ -76,10 +79,12 @@ class ViewController: UIViewController, UISearchBarDelegate, UITableViewDataSour
             currentAPIFirstLetter = ""
         }
         
+       
         if searchText.isEmpty {
             filteredLocations = []
             resultsTableView.isHidden = true
         } else {
+           
             filteredLocations = locations.filter { $0.lowercased().hasPrefix(searchText.lowercased()) }
             if filteredLocations.isEmpty {
                 filteredLocations = locations.filter { $0.lowercased().contains(searchText.lowercased()) }
@@ -89,18 +94,37 @@ class ViewController: UIViewController, UISearchBarDelegate, UITableViewDataSour
         }
     }
 
-       func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        view.endEditing(true) 
-        
-        guard let searchText = searchBar.text, !searchText.isEmpty else {
-            let alert = UIAlertController(title: "Empty Search", message: "Please enter an address to search", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default))
-            present(alert, animated: true)
-            return
-        }
-        
-        performSegue(withIdentifier: "showResults", sender: searchText)
+  
+func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    view.endEditing(true)
+    
+    guard let searchText = searchBar.text, !searchText.isEmpty else {
+        let alert = UIAlertController(
+            title: "Empty Search",
+            message: "Please enter an address to search",
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+        return
     }
+    
+    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+   
+    guard let tabBarVC = storyboard.instantiateViewController(withIdentifier: "ResultsTabBarController") as? UITabBarController else {
+        print("Could not find Tab Bar Controller with ID 'ResultsTabBarController'")
+        return
+    }
+    
+   
+    if let viewControllers = tabBarVC.viewControllers {
+        if let resultsVC = viewControllers.first as? ResultsViewController {
+            resultsVC.searchAddress = searchText
+        }
+    }
+    
+    navigationController?.pushViewController(tabBarVC, animated: true)
+}
 
     func fetchCrimeDataForLetter(letter: String) {
         let lowercaseLetter = letter.lowercased()
@@ -111,12 +135,11 @@ class ViewController: UIViewController, UISearchBarDelegate, UITableViewDataSour
             return
         }
         
-        print("📡 Attempting API connection for \(urlString)")
+        print("Attempting API connection for \(urlString)")
         
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             if let httpResponse = response as? HTTPURLResponse {
                 print("HTTP Response status code: \(httpResponse.statusCode)")
-                
                 if httpResponse.statusCode >= 400 {
                     print("HTTP Error: \(httpResponse.statusCode)")
                     return
@@ -135,10 +158,10 @@ class ViewController: UIViewController, UISearchBarDelegate, UITableViewDataSour
             
             print("Received data of size: \(data.count) bytes")
             
+            
             if let dataPreview = String(data: data.prefix(300), encoding: .utf8),
                dataPreview.trimmingCharacters(in: .whitespacesAndNewlines).hasPrefix("<") {
-                print("Received HTML instead of JSON data")
-                print("HTML preview: \(dataPreview)")
+                print("Received HTML instead of JSON data. Preview: \(dataPreview)")
                 return
             }
             
@@ -147,52 +170,45 @@ class ViewController: UIViewController, UISearchBarDelegate, UITableViewDataSour
                 let records = try decoder.decode([CrimeRecord].self, from: data)
                 
                 DispatchQueue.main.async {
-                    print("Connection to crime_data_\(lowercaseLetter).json was successful")
-                    print("Retrieved \(records.count) records, here is a preview:")
+                    print("Successfully fetched \(records.count) records for letter \(letter)")
                     let firstThree = records.prefix(3)
                     for record in firstThree {
-                        print(record.location)
+                        print("Preview location: \(record.location)")
                     }
                 }
             } catch {
                 print("JSON decoding error: \(error)")
                 if let dataPreview = String(data: data.prefix(300), encoding: .utf8) {
-                    print("📄 Raw data preview: \(dataPreview)")
+                    print("Raw data preview: \(dataPreview)")
                 }
             }
         }
         task.resume()
     }
     
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredLocations.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SearchResultCell") ?? UITableViewCell(style: .default, reuseIdentifier: "SearchResultCell")
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SearchResultCell")
+            ?? UITableViewCell(style: .default, reuseIdentifier: "SearchResultCell")
+        
         let location = filteredLocations[indexPath.row]
         cell.textLabel?.text = location
         return cell
     }
     
-   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    tableView.deselectRow(at: indexPath, animated: true)
-    let selectedLocation = filteredLocations[indexPath.row]
-    neighborhoodSearchBar.text = selectedLocation
-    resultsTableView.isHidden = true
-    filteredLocations = []
     
-    
-    performSegue(withIdentifier: "showResults", sender: selectedLocation)
-}
-    
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showResults",
-           let resultsVC = segue.destination as? ResultsViewController,
-           let address = sender as? String {
-            resultsVC.searchAddress = address
-        }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+       
+        let selectedLocation = filteredLocations[indexPath.row]
+        neighborhoodSearchBar.text = selectedLocation
+        resultsTableView.isHidden = true
+        filteredLocations = []
+        searchBarSearchButtonClicked(neighborhoodSearchBar)
     }
 }
-

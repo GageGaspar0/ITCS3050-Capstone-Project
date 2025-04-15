@@ -4,12 +4,7 @@
 //
 //  Created by Gage Gasparyan on 4/9/25.
 //
-//
-//  ResultsViewController.swift
-//  NeighborGood
-//
-//  Created by Gage Gasparyan on 4/9/25.
-//
+
 import Foundation
 import UIKit
 
@@ -51,9 +46,31 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     var searchFirstLetter: String = ""
-    
-    @IBOutlet weak var searchResultsTableView: UITableView!
     var searchAddress: String = ""
+    
+    
+    @IBOutlet weak var overviewContainerOne: UIView!
+    
+    @IBOutlet weak var subViewOne: UIView!
+    
+    @IBOutlet weak var subViewTwo: UIView!
+    
+    @IBOutlet weak var subViewThree: UIView!
+    
+    @IBOutlet weak var subViewFour: UIView!
+    
+    @IBOutlet weak var totalIncidentsLabel: UILabel!
+    
+    @IBOutlet weak var avgIncidentsPerYearLabel: UILabel!
+    
+    @IBOutlet weak var sixYearTrendImage: UIImageView!
+    
+    @IBOutlet weak var threeYearTrendImage: UIImageView!
+    
+    @IBOutlet weak var topThreeLabel: UILabel!
+    
+    @IBOutlet weak var mostCommonReports: UIView!
+    
     
     private var crimeRecords: [CrimeRecord] = []
     private var crimeStatistics: CrimeAnalysisService.CrimeStatistics?
@@ -61,12 +78,18 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Crime Reports"
+        title = "Overview"
         
-        searchResultsTableView.delegate = self
-        searchResultsTableView.dataSource = self
-        searchResultsTableView.register(UITableViewCell.self, forCellReuseIdentifier: "CrimeRecordCell")
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         
+        overviewContainerOne.layer.cornerRadius = 30
+        subViewOne.layer.cornerRadius = 10
+        subViewTwo.layer.cornerRadius = 10
+        subViewThree.layer.cornerRadius = 10
+        subViewFour.layer.cornerRadius = 10
+        mostCommonReports.layer.cornerRadius = 20
+        
+       
         if !searchAddress.isEmpty {
             print("Searching for address: \(searchAddress)")
             fetchCrimeData(for: searchAddress)
@@ -83,7 +106,6 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
         present(alertController, animated: true)
         
         print("Error displayed: \(message)")
-        searchResultsTableView.reloadData()
     }
     
     func fetchCrimeData(for address: String) {
@@ -158,9 +180,76 @@ class ResultsViewController: UIViewController, UITableViewDelegate, UITableViewD
                     print("Found \(relevantRecords.count) matching records for address: \(address)")
                     
                     self?.crimeRecords = relevantRecords
-                    // Add this line to analyze the data:
+                    if let tabBar = self?.tabBarController,
+                       let vcs = tabBar.viewControllers {
+                        // We know the second tab is the Detail tab:
+                        if let detailVC = vcs[1] as? DetailViewController {
+                            detailVC.crimeRecords = relevantRecords
+                        }
+                    }
                     self?.crimeStatistics = CrimeAnalysisService.analyze(crimeRecords: relevantRecords)
-                    self?.searchResultsTableView.reloadData()
+                    self?.totalIncidentsLabel.text = "\(self?.crimeRecords.count ?? 0)"
+                    self?.avgIncidentsPerYearLabel.text = "\(String(format: "%.2f", self?.crimeStatistics?.averageIncidentsPerYear ?? 0))"
+
+                    if let stats = self?.crimeStatistics {
+                        let sixYearIncreasing = CrimeAnalysisService.isCrimeIncreasingOverLastSixYears(incidentsPerYear: stats.incidentsPerYear)
+                        if sixYearIncreasing {
+                            self?.sixYearTrendImage.image = UIImage(systemName: "arrow.up.forward")
+                            self?.sixYearTrendImage.tintColor = .red
+                        } else {
+                            self?.sixYearTrendImage.image = UIImage(systemName: "arrow.down.forward")
+                            self?.sixYearTrendImage.tintColor = .green
+                        }
+                        
+                       
+                        let threeYearIncreasing = CrimeAnalysisService.isCrimeIncreasingOverLastThreeYears(incidentsPerYear: stats.incidentsPerYear)
+                        if threeYearIncreasing {
+                            self?.threeYearTrendImage.image = UIImage(systemName: "arrow.up.forward")
+                            self?.threeYearTrendImage.tintColor = .red
+                        } else {
+                            self?.threeYearTrendImage.image = UIImage(systemName: "arrow.down.forward")
+                            self?.threeYearTrendImage.tintColor = .green
+                        }
+                        self?.mostCommonReports.subviews.forEach { $0.removeFromSuperview() }
+                        
+                     
+                        let offenseSummary = Dictionary(grouping: relevantRecords, by: { $0.highestNibrsDescription })
+                            .mapValues { $0.count }
+                        
+                      
+                        let sortedOffenses = offenseSummary.sorted { $0.value > $1.value }
+                        let topOffenses = sortedOffenses.prefix(3)
+                        let totalOffenses = relevantRecords.count
+                        
+                       
+                        let containerWidth = self?.mostCommonReports.bounds.width ?? 353
+                        let containerHeight: CGFloat = 50
+                        let verticalSpacing: CGFloat = 10
+                        
+                      
+                        for (index, offense) in topOffenses.enumerated() {
+                            let yOffset = CGFloat(index) * (containerHeight + verticalSpacing)
+                            let containerFrame = CGRect(
+                                x: 0,
+                                y: yOffset,
+                                width: containerWidth,
+                                height: containerHeight
+                            )
+                            
+                            let container = CommonReportsContainer(frame: containerFrame)
+                            
+                            let offenseDescription = offense.key
+                            let offenseCount = offense.value
+                            let percentage = (Double(offenseCount) / Double(totalOffenses)) * 100.0
+                            
+                          
+                            container.offenseDescription.text = offenseDescription
+                            container.offensePercentage.text = String(format: "%.1f%%", percentage)
+                            
+                            self?.mostCommonReports.addSubview(container)
+                        }
+                    }
+                    
                 } catch {
                     print("JSON parsing error: \(error)")
                     self?.displayError("Failed to parse data: \(error.localizedDescription)")

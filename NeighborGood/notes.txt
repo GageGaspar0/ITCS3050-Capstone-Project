@@ -15,5 +15,32 @@ ideas for crime data analysis dashboard
 - go back and add what % of the total crime a specific offense makes up.
     ex: drug/narcotic offense - count 36 - this offense makes up 85% of the total crime in this neighborhood
     ex: breaking and entering - count 3 - this offense makes up 4% of th total crime for this neighborhood
+   
+    maybe provide a link to incident report if they are available?
     
 
+incident dashboard - overview
+
+total number of incidents
+average number of incidents per year
+trend based on last 6 years not including 2025
+trend based on last 3 years not including 2025
+
+top 3 highest frequency incident
+top location type description
+
+
+
+names of arrows I will use for Ui for trend
+arrow.up.forward
+arrow.down.forward
+
+how to change arrow colors:
+    func updateArrowIcon() {
+        if myBool {
+            arrowImageView.image = UIImage(systemName: "arrow.down")
+            arrowImageView.tintColor = .red
+        } else {
+            arrowImageView.image = UIImage(systemName: "arrow.up")
+            arrowImageView.tintColor = .green
+        }
