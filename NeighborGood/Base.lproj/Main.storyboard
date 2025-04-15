@@ -218,10 +218,10 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Dsg-t4-MTb">
-                                        <rect key="frame" x="35" y="20" width="60" height="60"/>
+                                        <rect key="frame" x="43" y="28" width="45" height="45"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="60" id="NhM-CS-F4L"/>
-                                            <constraint firstAttribute="height" constant="60" id="a0f-Yv-2aQ"/>
+                                            <constraint firstAttribute="width" constant="45" id="NhM-CS-F4L"/>
+                                            <constraint firstAttribute="height" constant="45" id="a0f-Yv-2aQ"/>
                                         </constraints>
                                     </imageView>
                                 </subviews>
@@ -232,7 +232,9 @@
                                     <constraint firstItem="0ef-zb-Q9l" firstAttribute="leading" secondItem="m8K-2I-fjY" secondAttribute="leading" constant="29" id="Xj8-rQ-A5v"/>
                                     <constraint firstItem="Dsg-t4-MTb" firstAttribute="centerY" secondItem="m8K-2I-fjY" secondAttribute="centerY" id="YKq-7e-IU9"/>
                                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="0ef-zb-Q9l" secondAttribute="trailing" constant="20" symbolic="YES" id="ZcW-yI-2ki"/>
+                                    <constraint firstItem="Dsg-t4-MTb" firstAttribute="centerX" secondItem="m8K-2I-fjY" secondAttribute="centerX" id="a9f-TR-KJd"/>
                                     <constraint firstAttribute="bottom" secondItem="0ef-zb-Q9l" secondAttribute="bottom" constant="83" id="lFV-DT-SWj"/>
+                                    <constraint firstItem="Dsg-t4-MTb" firstAttribute="centerY" secondItem="m8K-2I-fjY" secondAttribute="centerY" id="z1d-rZ-zQi"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8O0-Ct-cSt">
@@ -245,10 +247,10 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aIe-qb-9Si">
-                                        <rect key="frame" x="35" y="20" width="60" height="60"/>
+                                        <rect key="frame" x="43" y="28" width="45" height="45"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="60" id="P1M-2W-w5c"/>
-                                            <constraint firstAttribute="width" constant="60" id="XMz-xM-n66"/>
+                                            <constraint firstAttribute="height" constant="45" id="P1M-2W-w5c"/>
+                                            <constraint firstAttribute="width" constant="45" id="XMz-xM-n66"/>
                                         </constraints>
                                     </imageView>
                                 </subviews>
@@ -331,6 +333,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="selectedImageTintColor" systemColor="tableCellBlueTextColor"/>
                     </tabBar>
                     <connections>

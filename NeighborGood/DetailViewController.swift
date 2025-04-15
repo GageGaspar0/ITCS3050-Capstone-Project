@@ -32,32 +32,33 @@ class DetailViewController: UIViewController, UITableViewDataSource, UITableView
         groupCrimeRecords()
     }
     
-    private func groupCrimeRecords() {
-        dataByYearAndOffense.removeAll()
+  private func groupCrimeRecords() {
+    dataByYearAndOffense.removeAll()
+    
+    for record in crimeRecords {
+        let year = record.year
+        let offense = record.highestNibrsDescription
         
-        for record in crimeRecords {
-            let year = record.year
-            let offense = record.highestNibrsDescription
-            
-            if dataByYearAndOffense[year] == nil {
-                dataByYearAndOffense[year] = [:]
-            }
-            if dataByYearAndOffense[year]?[offense] == nil {
-                dataByYearAndOffense[year]?[offense] = []
-            }
-            
-            dataByYearAndOffense[year]?[offense]?.append(record)
+        if dataByYearAndOffense[year] == nil {
+            dataByYearAndOffense[year] = [:]
+        }
+        if dataByYearAndOffense[year]?[offense] == nil {
+            dataByYearAndOffense[year]?[offense] = []
         }
         
-        sortedYears = dataByYearAndOffense.keys.sorted { lhs, rhs in
-            if let leftInt = Int(lhs), let rightInt = Int(rhs) {
-                return leftInt < rightInt
-            } else {
-                return lhs < rhs
-            }
-        }
-        tableView.reloadData()
+        dataByYearAndOffense[year]?[offense]?.append(record)
     }
+    
+    // Sort descending (newest first)
+    sortedYears = dataByYearAndOffense.keys.sorted { lhs, rhs in
+        if let leftInt = Int(lhs), let rightInt = Int(rhs) {
+            return leftInt > rightInt
+        } else {
+            return lhs > rhs
+        }
+    }
+    tableView.reloadData()
+}
     
     
     
